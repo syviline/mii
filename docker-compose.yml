@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    container_name: mii-backend-web
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
+      DATABASE_PATH: "/app/data/db.sqlite3"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ml_models:/app/ml_models
+      - django_data:/app/data
+
+volumes:
+  django_data:
