@@ -23,7 +23,7 @@ def preprocess_image_vehicle(image_file):
     
     # 5. Специфичная для MobileNetV2 нормализация (входные данные должны быть [-1, 1])
     # В ноутбуке использовалась функция preprocess_input
-    img_preprocessed = preprocess_input(img_array)
+    # img_preprocessed = preprocess_input(img_array)
     
     return img_preprocessed
 
