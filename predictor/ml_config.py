@@ -21,7 +21,8 @@ MODEL_CONFIGS = {
     },
     'vehicle-dense': {
         'title': 'Vehicle Dense',
-        'path': settings.MODEL_STORAGE_DIR / 'baseline_vehicle_model.keras',
+        'path': settings.MODEL_STORAGE_DIR / 'vehicle_mobilenetv2_dynamic.tflite',
+        'runtime': 'tflite',
         'preprocess': preprocessing.preprocess_image_vehicle,
         'labels': [
             'Auto Rickshaws',

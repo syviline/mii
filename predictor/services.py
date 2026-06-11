@@ -13,27 +13,39 @@ def load_model(model_key):
     if not model_path.exists():
         raise FileNotFoundError(
             f'Файл модели не найден: {model_path}. '
-            'Положите .keras файл в папку ml_models или поправьте путь в predictor/ml_config.py.'
+            'Положите файл модели в папку ml_models или поправьте путь в predictor/ml_config.py.'
         )
 
-    from tensorflow import keras
+    if config.get('runtime') == 'tflite':
+        import tensorflow as tf
+        interpreter = tf.lite.Interpreter(model_path=str(model_path))
+        interpreter.allocate_tensors()
+        return interpreter
 
+    from tensorflow import keras
     return keras.models.load_model(model_path)
 
 
 def predict_image(model_key, image_file):
+    import numpy as np
+
     config = get_model_config(model_key)
     model = load_model(model_key)
     batch = config['preprocess'](image_file)
-    predictions = model.predict(batch)
 
-    if len(predictions) == 0:
-        raise ValidationError('Модель вернула пустой результат.')
+    if config.get('runtime') == 'tflite':
+        input_details = model.get_input_details()
+        output_details = model.get_output_details()
+        model.set_tensor(input_details[0]['index'], batch.astype(np.float32))
+        model.invoke()
+        scores = model.get_tensor(output_details[0]['index'])[0]
+    else:
+        predictions = model.predict(batch)
+        if len(predictions) == 0:
+            raise ValidationError('Модель вернула пустой результат.')
+        scores = predictions[0]
 
-    scores = predictions[0]
     if config.get('from_logits'):
-        import numpy as np
-
         exp_scores = np.exp(scores - np.max(scores))
         scores = exp_scores / exp_scores.sum()
 
