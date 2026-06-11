@@ -25,7 +25,7 @@ def preprocess_image_vehicle(image_file):
     # В ноутбуке использовалась функция preprocess_input
     # img_preprocessed = preprocess_input(img_array)
     
-    return img_preprocessed
+    return img_array
 
 
 def dense_rgb_128_raw(image_file):
