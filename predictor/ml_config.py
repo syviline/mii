@@ -6,7 +6,21 @@ from . import preprocessing
 MODEL_CONFIGS = {
     # Replace this sample entry with your real model file and labels.
     'vehicle': {
-        'title': 'Vehicle',
+        'title': 'Vehicle CNN',
+        'path': settings.MODEL_STORAGE_DIR / 'baseline_vehicle_model.keras',
+        'preprocess': preprocessing.preprocess_image_vehicle,
+        'labels': [
+            'Auto Rickshaws',
+            'Bikes',
+            'Cars',
+            'Motorcycles',
+            'Planes',
+            'Ships',
+            'Trains'
+        ]
+    },
+    'vehicle-dense': {
+        'title': 'Vehicle Dense',
         'path': settings.MODEL_STORAGE_DIR / 'baseline_vehicle_model.keras',
         'preprocess': preprocessing.preprocess_image_vehicle,
         'labels': [
@@ -20,7 +34,14 @@ MODEL_CONFIGS = {
         ]
     },
     'cat-dog-dense-128': {
-        'title': 'Cat Dog Dense 128x128',
+        'title': 'Cat Dog',
+        'path': settings.MODEL_STORAGE_DIR / 'cats_dogs.keras',
+        'preprocess': preprocessing.dense_rgb_128_raw,
+        'labels': ['cats', 'dogs'],
+        'from_logits': True,
+    },
+    'cat-dog-dense': {
+        'title': 'Cat Dog Dense',
         'path': settings.MODEL_STORAGE_DIR / 'cats_dogs.keras',
         'preprocess': preprocessing.dense_rgb_128_raw,
         'labels': ['cats', 'dogs'],
